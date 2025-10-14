@@ -1,13 +1,15 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 module.exports = {
   entry: './src/js/script.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
     clean: true,
-    publicPath: '/Trello/',
+    publicPath: isProduction ? './' : '/',
   },
   module: {
     rules: [
@@ -19,7 +21,8 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './index.html'
+      template: './index.html',
+      minify: isProduction,
     })
   ],
   devServer: {
@@ -27,5 +30,5 @@ module.exports = {
     open: true,
     hot: true,
   },
-  mode: 'development'
+  mode: isProduction ? 'production' : 'development',
 };
