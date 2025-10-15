@@ -199,28 +199,28 @@ export class Board {
   initializeSampleCards() {
     const sampleData = {
       todo: [
-        'Welcome to Trello!',
-        'This is a card',
-        'Click on a card to see what\'s behind it',
-        'You can attach pictures and files...',
-        '... any kind of hyperlink ...',
-        '... or checklists.'
+        "Добро пожаловать в Trello!",
+        "Это открытка",
+        "Нажмите на открытку, чтобы увидеть, что за ней скрывается",
+        "Вы можете прикреплять фотографии и файлы...",
+        "... любые гиперссылки...",
+        "...или контрольные списки."
       ],
       progress: [
-        'Invite your team to this board using the Add Members button',
-        'Drag people onto a card to indicate that they\'re responsible for it.',
-        'Use color-coded labels for organization',
-        'Make as many lists as you need!',
-        'Try dragging cards anywhere.',
-        'Finished with a card? Archive it.'
+        "Пригласите свою команду на эту доску, нажав кнопку 'Добавить участников'",
+        "Перетащите людей на карточку, чтобы указать, что они отвечают за это",
+        "Используйте цветные надписи для организации",
+        "Составьте столько списков, сколько вам нужно!",
+        "Попробуйте перетаскивать карточки куда угодно.",
+        "Закончили с открыткой? Заархивируйте это."
       ],
       done: [
-        'To learn more tricks, check out the guide.',
-        'Use as many boards as you want. We\'ll make more!',
-        'Want to use keyboard shortcuts? We have them!',
-        'Want updates on new features?',
-        'Need help?',
-        'Want current tips, usage examples, or API info?'
+        "Чтобы узнать больше трюков, ознакомьтесь с руководством",
+        "Используйте столько досок, сколько хотите. Мы сделаем еще больше!",
+        "Хотите использовать сочетания клавиш? Они у нас есть!",
+        "Хотите обновления о новых функциях?",
+        "Нужна помощь?",
+        "Хотите актуальные советы, примеры использования или информацию об API?"
       ]
     };
 
