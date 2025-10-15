@@ -1,0 +1,236 @@
+import { Card } from './Card.js';
+
+export class Board {
+  constructor() {
+    this.columns = document.querySelectorAll('.column');
+    this.draggedCard = null;
+    this.dragOffset = { x: 0, y: 0 };
+    this.placeholder = null;
+    this.init();
+  }
+
+  init() {
+    this.initializeCardEvents();
+    this.initializeColumnEvents();
+    this.initializeAddCardForms();
+    this.initializeSampleCards();
+  }
+
+  initializeColumnEvents() {
+    this.columns.forEach(column => {
+      column.addEventListener('dragover', this.handleDragOver.bind(this));
+      column.addEventListener('drop', this.handleDrop.bind(this));
+      column.addEventListener('dragenter', this.handleDragEnter.bind(this));
+      column.addEventListener('dragleave', this.handleDragLeave.bind(this));
+    });
+  }
+
+  initializeAddCardForms() {
+    document.querySelectorAll('.add-card-btn').forEach(btn => {
+      btn.addEventListener('click', () => this.showAddCardForm(btn));
+    });
+
+    document.querySelectorAll('.cancel-add-card').forEach(btn => {
+      btn.addEventListener('click', (e) => this.hideAddCardForm(e.target.closest('.column')));
+    });
+
+    document.querySelectorAll('.confirm-add-card').forEach(btn => {
+      btn.addEventListener('click', (e) => this.handleAddCard(e.target.closest('.column')));
+    });
+
+    document.querySelectorAll('.card-text').forEach(textarea => {
+      textarea.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          this.handleAddCard(e.target.closest('.column'));
+        }
+      });
+    });
+  }
+
+  showAddCardForm(button) {
+    const column = button.closest('.column');
+    const form = column.querySelector('.add-card-form');
+    const textarea = form.querySelector('.card-text');
+    
+    button.style.display = 'none';
+    form.style.display = 'block';
+    textarea.focus();
+  }
+
+  hideAddCardForm(column) {
+    const form = column.querySelector('.add-card-form');
+    const button = column.querySelector('.add-card-btn');
+    const textarea = form.querySelector('.card-text');
+    
+    form.style.display = 'none';
+    button.style.display = 'block';
+    textarea.value = '';
+  }
+
+  handleAddCard(column) {
+    const textarea = column.querySelector('.card-text');
+    const text = textarea.value.trim();
+    
+    if (text) {
+      const container = column.querySelector('.cards-container');
+      this.createCard(text, container);
+    }
+    
+    this.hideAddCardForm(column);
+  }
+
+  createCard(text, container) {
+    const card = new Card(text, this);
+    container.appendChild(card.element);
+    return card;
+  }
+
+  handleDragStart(card, e) {
+    this.draggedCard = card;
+    this.dragOffset.x = e.clientX - card.element.getBoundingClientRect().left;
+    this.dragOffset.y = e.clientY - card.element.getBoundingClientRect().top;
+    
+    card.element.classList.add('dragging');
+    
+    this.placeholder = document.createElement('div');
+    this.placeholder.className = 'card-placeholder';
+    this.placeholder.style.height = `${card.element.offsetHeight}px`;
+  }
+
+  handleDragOver(e) {
+    e.preventDefault();
+    if (!this.draggedCard) return;
+
+    const container = this.findCardsContainer(e.target);
+    if (!container) return;
+
+    const afterElement = this.getDragAfterElement(container, e.clientY);
+    
+    const existingPlaceholder = container.querySelector('.card-placeholder');
+    if (existingPlaceholder) {
+      existingPlaceholder.remove();
+    }
+    
+    if (afterElement) {
+      container.insertBefore(this.placeholder, afterElement);
+    } else {
+      container.append(this.placeholder);
+    }
+  }
+
+  handleDragEnter(e) {
+    e.preventDefault();
+    const column = e.target.closest('.column');
+    if (column) {
+      column.style.backgroundColor = 'rgba(0, 121, 191, 0.1)';
+    }
+  }
+
+  handleDragLeave(e) {
+    e.preventDefault();
+    const column = e.target.closest('.column');
+    if (column && !column.contains(e.relatedTarget)) {
+      column.style.backgroundColor = '';
+    }
+  }
+
+  handleDrop(e) {
+    e.preventDefault();
+    if (!this.draggedCard || !this.placeholder) return;
+
+    const container = this.findCardsContainer(e.target);
+    if (!container) return;
+
+    const afterElement = this.getDragAfterElement(container, e.clientY);
+    
+    if (afterElement) {
+      container.insertBefore(this.draggedCard.element, afterElement);
+    } else {
+      container.append(this.draggedCard.element);
+    }
+    
+    this.cleanupDrag();
+  }
+
+  handleDragEnd(card) {
+    this.cleanupDrag();
+  }
+
+  cleanupDrag() {
+    if (this.draggedCard) {
+      this.draggedCard.element.classList.remove('dragging');
+      this.draggedCard = null;
+    }
+    
+    if (this.placeholder) {
+      this.placeholder.remove();
+      this.placeholder = null;
+    }
+    
+    this.columns.forEach(column => {
+      column.style.backgroundColor = '';
+    });
+  }
+
+  findCardsContainer(element) {
+    return element.closest('.column')?.querySelector('.cards-container');
+  }
+
+  getDragAfterElement(container, y) {
+    const draggableElements = [...container.querySelectorAll('.card:not(.dragging)')];
+    
+    return draggableElements.reduce((closest, child) => {
+      const box = child.getBoundingClientRect();
+      const offset = y - box.top - box.height / 2;
+      
+      if (offset < 0 && offset > closest.offset) {
+        return { offset: offset, element: child };
+      } else {
+        return closest;
+      }
+    }, { offset: Number.NEGATIVE_INFINITY }).element;
+  }
+
+  initializeCardEvents() {
+    // Events are handled by Card class
+  }
+
+  initializeSampleCards() {
+    const sampleData = {
+      todo: [
+        'Welcome to Trello!',
+        'This is a card',
+        'Click on a card to see what\'s behind it',
+        'You can attach pictures and files...',
+        '... any kind of hyperlink ...',
+        '... or checklists.'
+      ],
+      progress: [
+        'Invite your team to this board using the Add Members button',
+        'Drag people onto a card to indicate that they\'re responsible for it.',
+        'Use color-coded labels for organization',
+        'Make as many lists as you need!',
+        'Try dragging cards anywhere.',
+        'Finished with a card? Archive it.'
+      ],
+      done: [
+        'To learn more tricks, check out the guide.',
+        'Use as many boards as you want. We\'ll make more!',
+        'Want to use keyboard shortcuts? We have them!',
+        'Want updates on new features?',
+        'Need help?',
+        'Want current tips, usage examples, or API info?'
+      ]
+    };
+
+    Object.keys(sampleData).forEach(columnId => {
+      const container = document.querySelector(`[data-column-id="${columnId}"] .cards-container`);
+      if (container) {
+        sampleData[columnId].forEach(text => {
+          this.createCard(text, container);
+        });
+      }
+    });
+  }
+}

@@ -4,12 +4,9 @@
 
 A Trello-like kanban board for task management, built with vanilla JavaScript and Webpack.
 
-## 🚀 Features
+## 🚀 Live Demo
 
-- ✅ Create, delete, and organize cards
-- 🔄 Drag and drop cards between columns
-- 🎨 Clean, responsive UI
-- 📱 Mobile-friendly design
+**Check out the live application: [Trello Board on GitHub Pages](https://OlegFPY85.github.io/Trello/)**
 
 ## 🛠️ Technologies Used
 

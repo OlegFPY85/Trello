@@ -5,7 +5,7 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
     background-color: #0079bf;
     padding: 20px;
     min-height: 100vh;
@@ -13,37 +13,49 @@ body {
 
 .board {
     display: flex;
-    gap: 20px;
-    min-height: 80vh;
+    gap: 16px;
     align-items: flex-start;
+    overflow-x: auto;
+    padding-bottom: 20px;
 }
 
 .column {
-    flex: 1;
+    width: 300px;
+    min-width: 300px;
     background: #ebecf0;
     border-radius: 3px;
-    padding: 10px;
-    min-width: 300px;
+    padding: 8px;
     display: flex;
     flex-direction: column;
+    max-height: calc(100vh - 40px);
 }
 
 .column h2 {
-    font-size: 16px;
-    margin-bottom: 10px;
+    font-size: 14px;
+    font-weight: 600;
     color: #172b4d;
-    padding: 0 8px;
+    margin: 0 0 12px 0;
+    padding: 6px 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .card {
     background: white;
-    margin: 4px 0;
-    padding: 8px;
+    margin: 0 0 8px 0;
+    padding: 6px 8px;
     border-radius: 3px;
     cursor: grab;
     position: relative;
     box-shadow: 0 1px 0 rgba(9,30,66,.25);
     user-select: none;
+    min-height: 20px;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+.card:hover {
+    background: #f5f6f8;
 }
 
 .card:hover .delete-card {
@@ -54,8 +66,7 @@ body {
     display: none;
     position: absolute;
     right: 8px;
-    top: 50%;
-    transform: translateY(-50%);
+    top: 6px;
     cursor: pointer;
     color: #42526e;
     font-size: 16px;
@@ -64,50 +75,140 @@ body {
     height: 20px;
     text-align: center;
     line-height: 18px;
+    border-radius: 3px;
+}
+
+.delete-card:hover {
+    background: rgba(9,30,66,.08);
+    color: #172b4d;
 }
 
 .card.dragging {
-    opacity: 0.5;
     transform: rotate(5deg);
     cursor: grabbing;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .cards-container {
     flex: 1;
-    min-height: 40px;
+    overflow-y: auto;
+    min-height: 10px;
 }
 
 .card-placeholder {
-    height: 40px;
-    border: 2px dashed #ccc;
-    margin: 4px 0;
+    border: 2px dashed #c4c9d2;
+    margin: 0 0 8px 0;
     border-radius: 3px;
-    background: rgba(0, 0, 0, 0.05);
+    background: rgba(9,30,66,.04);
+}
+
+.add-card-form {
+    display: none;
+    margin-top: 8px;
+}
+
+.card-text {
+    width: 100%;
+    border: none;
+    border-radius: 3px;
+    padding: 6px 8px;
+    resize: none;
+    min-height: 54px;
+    font-family: inherit;
+    font-size: 14px;
+    box-shadow: 0 1px 0 rgba(9,30,66,.25);
+    margin-bottom: 8px;
+    line-height: 20px;
+}
+
+.card-text:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #0079bf;
+}
+
+.add-card-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.confirm-add-card {
+    background: #0079bf;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.confirm-add-card:hover {
+    background: #026aa7;
+}
+
+.cancel-add-card {
+    background: none;
+    border: none;
+    color: #6b778c;
+    cursor: pointer;
+    font-size: 18px;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 3px;
+}
+
+.cancel-add-card:hover {
+    background: rgba(9,30,66,.08);
+    color: #172b4d;
 }
 
 .add-card-btn {
     background: none;
     border: none;
-    color: #5e6c84;
+    color: #6b778c;
     cursor: pointer;
     padding: 8px;
     width: 100%;
     text-align: left;
     border-radius: 3px;
-    margin-top: 8px;
+    margin-top: 2px;
+    font-size: 14px;
+    display: block;
 }
 
 .add-card-btn:hover {
     background: rgba(9,30,66,.08);
     color: #172b4d;
-}
-.column.drag-over {
-    background-color: rgba(0, 121, 191, 0.1);
+    text-decoration: underline;
 }
 
-.card.dragging {
-    opacity: 0.5;
-    transform: rotate(5deg);
-    cursor: grabbing;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+/* Точное соответствие макету Trello */
+.column:nth-child(1) h2 {
+    color: #5e6c84;
+}
+
+.column:nth-child(2) h2 {
+    color: #5e6c84;
+}
+
+.column:nth-child(3) h2 {
+    color: #5e6c84;
+}
+
+/* Адаптивность */
+@media (max-width: 1024px) {
+    .board {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .column {
+        width: 100%;
+        max-width: none;
+        margin-bottom: 16px;
+    }
 }
