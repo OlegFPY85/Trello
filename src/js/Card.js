@@ -16,7 +16,7 @@ export class Card {
     deleteBtn.className = 'delete-card';
     deleteBtn.textContent = '×';
     
-    card.appendChild(deleteBtn);
+    card.append(deleteBtn);
     return card;
   }
 
@@ -39,7 +39,7 @@ export class Card {
     const dragImage = this.element.cloneNode(true);
     dragImage.style.width = `${this.element.offsetWidth}px`;
     dragImage.style.opacity = '0.7';
-    document.body.appendChild(dragImage);
+    document.body.append(dragImage);
     e.dataTransfer.setDragImage(dragImage, e.offsetX, e.offsetY);
     
     setTimeout(() => {

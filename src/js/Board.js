@@ -82,7 +82,7 @@ export class Board {
 
   createCard(text, container) {
     const card = new Card(text, this);
-    container.appendChild(card.element);
+    container.append(card.element);
     return card;
   }
 
