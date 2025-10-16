@@ -43,7 +43,7 @@ export class Card {
     e.dataTransfer.setDragImage(dragImage, e.offsetX, e.offsetY);
     
     setTimeout(() => {
-      document.body.removeChild(dragImage);
+      document.body.remove(dragImage);
     }, 0);
   }
 
