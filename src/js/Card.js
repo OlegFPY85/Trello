@@ -32,12 +32,10 @@ export class Card {
   }
 
   handleDragStart(e) {
-    // Delegate to board
     if (this.board) {
       this.board.handleDragStart(this, e);
     }
-    
-    // Set drag image to follow cursor properly
+
     const dragImage = this.element.cloneNode(true);
     dragImage.style.width = `${this.element.offsetWidth}px`;
     dragImage.style.opacity = '0.7';
@@ -50,7 +48,6 @@ export class Card {
   }
 
   handleDragEnd() {
-    // Delegate to board
     if (this.board) {
       this.board.handleDragEnd(this);
     }

@@ -193,7 +193,6 @@ export class Board {
   }
 
   initializeCardEvents() {
-    // Events are handled by Card class
   }
 
   initializeSampleCards() {

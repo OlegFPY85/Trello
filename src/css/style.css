@@ -186,7 +186,6 @@ body {
     text-decoration: underline;
 }
 
-/* Точное соответствие макету Trello */
 .column:nth-child(1) h2 {
     color: #5e6c84;
 }
@@ -199,7 +198,6 @@ body {
     color: #5e6c84;
 }
 
-/* Адаптивность */
 @media (max-width: 1024px) {
     .board {
         flex-direction: column;
