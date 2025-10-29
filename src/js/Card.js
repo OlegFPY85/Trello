@@ -15,6 +15,7 @@ export class Card {
     const deleteBtn = document.createElement('span');
     deleteBtn.className = 'delete-card';
     deleteBtn.textContent = '×';
+    deleteBtn.title = 'Удалить карточку';
     
     card.append(deleteBtn);
     return card;
@@ -35,16 +36,31 @@ export class Card {
     if (this.board) {
       this.board.handleDragStart(this, e);
     }
-
-    const dragImage = this.element.cloneNode(true);
-    dragImage.style.width = `${this.element.offsetWidth}px`;
-    dragImage.style.opacity = '0.7';
-    document.body.append(dragImage);
-    e.dataTransfer.setDragImage(dragImage, e.offsetX, e.offsetY);
+    
+    const dragImage = this.createDragImage(e);
+    e.dataTransfer.setDragImage(dragImage, this.board.dragOffset.x, this.board.dragOffset.y);
+    e.dataTransfer.effectAllowed = 'move';
     
     setTimeout(() => {
-      document.body.remove(dragImage);
+      if (dragImage.parentNode) {
+        dragImage.remove();
+      }
     }, 0);
+  }
+
+  createDragImage(e) {
+    const dragImage = this.element.cloneNode(true);
+    dragImage.style.width = `${this.element.offsetWidth}px`;
+    dragImage.style.opacity = '0.8';
+    dragImage.style.transform = 'rotate(5deg)';
+    dragImage.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.15)';
+    dragImage.style.position = 'fixed';
+    dragImage.style.left = '-1000px';
+    dragImage.style.top = '-1000px';
+    dragImage.classList.add('dragging');
+    
+    document.body.append(dragImage);
+    return dragImage;
   }
 
   handleDragEnd() {

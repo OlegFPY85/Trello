@@ -17,6 +17,7 @@ body {
     align-items: flex-start;
     overflow-x: auto;
     padding-bottom: 20px;
+    min-height: 100vh;
 }
 
 .column {
@@ -28,12 +29,17 @@ body {
     display: flex;
     flex-direction: column;
     max-height: calc(100vh - 40px);
+    transition: background-color 0.2s ease;
+}
+
+.column.drag-over {
+    background: rgba(0, 121, 191, 0.1);
 }
 
 .column h2 {
     font-size: 14px;
     font-weight: 600;
-    color: #172b4d;
+    color: #5e6c84;
     margin: 0 0 12px 0;
     padding: 6px 8px;
     text-transform: uppercase;
@@ -43,7 +49,7 @@ body {
 .card {
     background: white;
     margin: 0 0 8px 0;
-    padding: 6px 8px;
+    padding: 6px 8px 2px 8px;
     border-radius: 3px;
     cursor: grab;
     position: relative;
@@ -52,10 +58,13 @@ body {
     min-height: 20px;
     font-size: 14px;
     line-height: 20px;
+    word-wrap: break-word;
+    transition: box-shadow 0.2s ease;
 }
 
 .card:hover {
     background: #f5f6f8;
+    box-shadow: 0 1px 0 rgba(9,30,66,.25), 0 2px 4px rgba(9,30,66,.15);
 }
 
 .card:hover .delete-card {
@@ -65,8 +74,8 @@ body {
 .delete-card {
     display: none;
     position: absolute;
-    right: 8px;
-    top: 6px;
+    right: 4px;
+    top: 4px;
     cursor: pointer;
     color: #42526e;
     font-size: 16px;
@@ -76,6 +85,7 @@ body {
     text-align: center;
     line-height: 18px;
     border-radius: 3px;
+    z-index: 10;
 }
 
 .delete-card:hover {
@@ -87,12 +97,14 @@ body {
     transform: rotate(5deg);
     cursor: grabbing;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    opacity: 0.9;
 }
 
 .cards-container {
     flex: 1;
     overflow-y: auto;
     min-height: 10px;
+    padding: 2px 0;
 }
 
 .card-placeholder {
@@ -100,6 +112,7 @@ body {
     margin: 0 0 8px 0;
     border-radius: 3px;
     background: rgba(9,30,66,.04);
+    transition: all 0.2s ease;
 }
 
 .add-card-form {
@@ -186,18 +199,7 @@ body {
     text-decoration: underline;
 }
 
-.column:nth-child(1) h2 {
-    color: #5e6c84;
-}
-
-.column:nth-child(2) h2 {
-    color: #5e6c84;
-}
-
-.column:nth-child(3) h2 {
-    color: #5e6c84;
-}
-
+/* Адаптивность */
 @media (max-width: 1024px) {
     .board {
         flex-direction: column;
@@ -209,4 +211,22 @@ body {
         max-width: none;
         margin-bottom: 16px;
     }
+}
+
+/* Скрываем scrollbar для лучшего вида */
+.cards-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.cards-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.cards-container::-webkit-scrollbar-thumb {
+    background: #c4c9d2;
+    border-radius: 4px;
+}
+
+.cards-container::-webkit-scrollbar-thumb:hover {
+    background: #a5adba;
 }

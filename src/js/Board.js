@@ -88,8 +88,10 @@ export class Board {
 
   handleDragStart(card, e) {
     this.draggedCard = card;
-    this.dragOffset.x = e.clientX - card.element.getBoundingClientRect().left;
-    this.dragOffset.y = e.clientY - card.element.getBoundingClientRect().top;
+    
+    const rect = card.element.getBoundingClientRect();
+    this.dragOffset.x = e.clientX - rect.left;
+    this.dragOffset.y = e.clientY - rect.top;
     
     card.element.classList.add('dragging');
     
@@ -123,7 +125,7 @@ export class Board {
     e.preventDefault();
     const column = e.target.closest('.column');
     if (column) {
-      column.style.backgroundColor = 'rgba(0, 121, 191, 0.1)';
+      column.classList.add('drag-over');
     }
   }
 
@@ -131,7 +133,7 @@ export class Board {
     e.preventDefault();
     const column = e.target.closest('.column');
     if (column && !column.contains(e.relatedTarget)) {
-      column.style.backgroundColor = '';
+      column.classList.remove('drag-over');
     }
   }
 
@@ -142,10 +144,11 @@ export class Board {
     const container = this.findCardsContainer(e.target);
     if (!container) return;
 
-    const afterElement = this.getDragAfterElement(container, e.clientY);
+    const cards = container.querySelectorAll('.card:not(.dragging)');
+    const placeholderIndex = Array.from(container.children).indexOf(this.placeholder);
     
-    if (afterElement) {
-      container.insertBefore(this.draggedCard.element, afterElement);
+    if (placeholderIndex >= 0) {
+      container.insertBefore(this.draggedCard.element, container.children[placeholderIndex]);
     } else {
       container.append(this.draggedCard.element);
     }
@@ -169,7 +172,7 @@ export class Board {
     }
     
     this.columns.forEach(column => {
-      column.style.backgroundColor = '';
+      column.classList.remove('drag-over');
     });
   }
 
@@ -193,6 +196,7 @@ export class Board {
   }
 
   initializeCardEvents() {
+    // Events are handled by Card class
   }
 
   initializeSampleCards() {
